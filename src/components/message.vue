@@ -33,7 +33,16 @@ export default {
   },
   methods: {
       vaildate(){
-          return this.$refs['ruleForm'].validate();
+        return new Promise((resolve, reject) => {
+          this.$refs.ruleForm.validate((valid, field) => {
+            console.log(valid, field)
+            if (valid) {
+              resolve(true)
+            } else {
+              reject(new Error(field.content[0].message))
+            }
+          })
+        })
       },
       getData(){
           return this.ruleForm
