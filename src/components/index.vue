@@ -1,35 +1,52 @@
 
 <template>
-  <el-form
-    :model="indexForm"
-    :rules="rules"
-    ref="indexForm"
-    label-width="100px"
-    class="demo-indexForm"
-    style="width:800px;margin:0 auto;"
-    size="mini"
-  >
-  <el-form-item label="人群类型" prop="customerType">
-      <el-select v-model="indexForm.customerType" placeholder="请选择人群类型">
-        <el-option label="B端" value="1"></el-option>
-        <el-option label="C端" value="2"></el-option>
+  <el-form :model="indexForm"
+           :rules="rules"
+           ref="indexForm"
+           label-width="100px"
+           class="demo-indexForm"
+           style="width:800px;margin:0 auto;"
+           size="mini">
+    <el-form-item label="人群类型"
+                  prop="customerType">
+      <el-select v-model="indexForm.customerType"
+                 placeholder="请选择人群类型">
+        <el-option label="B端"
+                   value="1"></el-option>
+        <el-option label="C端"
+                   value="2"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="类型" prop="type">
-      <el-select v-model="indexForm.type" placeholder="请选择类型">
-        <el-option label="短信" value="1"></el-option>
-        <el-option label="邮件" value="2"></el-option>
-        <el-option label="App Push" value="3"></el-option>
+    <el-form-item label="类型"
+                  prop="type">
+      <el-select v-model="indexForm.type"
+                 placeholder="请选择类型">
+        <el-option label="短信"
+                   value="1"></el-option>
+        <el-option label="邮件"
+                   value="2"></el-option>
+        <el-option label="App Push"
+                   value="3"></el-option>
+        <el-option label="Table"
+                   value="4"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="名称" prop="name">
+    <el-form-item label="名称"
+                  prop="name">
       <el-input v-model="indexForm.name"></el-input>
     </el-form-item>
-    <message ref="message" v-if="indexForm.type==='1'"/>
-    <mail ref="mail" v-if="indexForm.type==='2'"/>
-    <apppush :customerType="indexForm.customerType" ref="apppush" v-if="indexForm.type==='3'"/>
+    <message ref="message"
+             v-if="indexForm.type==='1'" />
+    <mail ref="mail"
+          v-if="indexForm.type==='2'" />
+    <apppush :customerType="indexForm.customerType"
+             ref="apppush"
+             v-if="indexForm.type==='3'" />
+    <custom-table ref="table"
+                  v-if="indexForm.type==='4'"></custom-table>
     <el-form-item>
-      <el-button type="primary" @click="submitForm1()">立即创建</el-button>
+      <el-button type="primary"
+                 @click="submitForm1()">立即创建</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -38,13 +55,14 @@
 import apppush from "./apppush";
 import message from "./message";
 import mail from "./mail";
+import CustomTable from "./table"
 export default {
-  data() {
+  data () {
     return {
       indexForm: {
         type: "1",
         name: "",
-        customerType:'1'
+        customerType: '1'
       },
       rules: {
         name: [
@@ -55,36 +73,39 @@ export default {
       typeMap: {
         1: "message",
         2: "mail",
-        3: "apppush"
+        3: "apppush",
+        4: "table"
       },
       // 模拟的不同类型表单的提交
       fakeSubmit: {
         1: data => alert(`短信模板创建成功${JSON.stringify(data)}`),
         2: data => alert(`邮件模板创建成功${JSON.stringify(data)}`),
-        3: data => alert(`push模板创建成功${JSON.stringify(data)}`)
+        3: data => alert(`push模板创建成功${JSON.stringify(data)}`),
+        4: data => alert(`table模版创建成功${JSON.stringify(data)}`),
       },
     };
   },
   components: {
     apppush,
     mail,
-    message
+    message,
+    CustomTable
   },
   methods: {
-    validate(){
-        return new Promise((resolve, reject) => {
-          this.$refs.indexForm.validate((valid, field) => {
-            console.log(valid, field)
-            if (valid) {
-              resolve(true)
-            } else {
-              reject(new Error(Object.values(field)[0][0].message))
-            }
-          })
+    validate () {
+      return new Promise((resolve, reject) => {
+        this.$refs.indexForm.validate((valid, field) => {
+          console.log(valid, field)
+          if (valid) {
+            resolve(true)
+          } else {
+            reject(new Error(Object.values(field)[0][0].message))
+          }
         })
-      },
+      })
+    },
     // 父表单验证通过才会验证子表单，存在先后顺序
-    submitForm() {
+    submitForm () {
       const templateType = this.typeMap[this.indexForm.type];
       this.$refs["indexForm"]
         .validate()
@@ -112,7 +133,7 @@ export default {
         });
     },
     // 父表单，子表单一起验证
-    submitForm1() {
+    submitForm1 () {
       const templateType = this.typeMap[this.indexForm.type];
       const validate1 = this.validate();
       const validate2 = this.$refs[templateType].validate();

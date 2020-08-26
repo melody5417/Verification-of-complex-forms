@@ -1,27 +1,26 @@
 
 <template>
-<div>
-      <el-form
-    :model="ruleForm"
-    :rules="rules"
-    ref="ruleForm"
-    label-width="100px"
-    class="demo-ruleForm"
-    size="mini"
-  >
-    <el-form-item label="内容" prop="content">
-      <el-input v-model="ruleForm.content"></el-input>
-    </el-form-item>
-  </el-form>
-</div>
+  <div>
+    <el-form :model="ruleForm"
+             :rules="rules"
+             ref="ruleForm"
+             label-width="100px"
+             class="demo-ruleForm"
+             size="mini">
+      <el-form-item label="内容"
+                    prop="content">
+        <el-input v-model="ruleForm.content"></el-input>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       ruleForm: {
-          content:'',
+        content: '',
       },
       rules: {
         content: [
@@ -32,22 +31,22 @@ export default {
     };
   },
   methods: {
-      validate(){
-        return new Promise((resolve, reject) => {
-          this.$refs.ruleForm.validate((valid, field) => {
-            console.log(valid, field)
-            if (valid) {
-              resolve(true)
-            } else {
-              reject(new Error(Object.values(field)[0][0].message))
-            }
-          })
+    validate () {
+      return new Promise((resolve, reject) => {
+        this.$refs.ruleForm.validate((valid, field) => {
+          console.log(valid, field)
+          if (valid) {
+            resolve(true)
+          } else {
+            reject(new Error(Object.values(field)[0][0].message))
+          }
         })
-      },
-      getData(){
-          return this.ruleForm
-      },  
-    resetForm() {
+      })
+    },
+    getData () {
+      return this.ruleForm
+    },
+    resetForm () {
       this.$refs['ruleForm'].resetFields();
     },
   }

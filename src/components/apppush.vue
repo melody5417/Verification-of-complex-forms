@@ -1,14 +1,22 @@
 
 <template>
   <div>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="mini">
-      <el-form-item label="主题" prop="title">
+    <el-form :model="ruleForm"
+             :rules="rules"
+             ref="ruleForm"
+             label-width="100px"
+             class="demo-ruleForm"
+             size="mini">
+      <el-form-item label="主题"
+                    prop="title">
         <el-input v-model="ruleForm.title"></el-input>
       </el-form-item>
-      <el-form-item label="内容" prop="content">
+      <el-form-item label="内容"
+                    prop="content">
         <el-input v-model="ruleForm.content"></el-input>
       </el-form-item>
-      <el-form-item label="落地页" prop="targetUrl">
+      <el-form-item label="落地页"
+                    prop="targetUrl">
         <el-input v-model="ruleForm.targetUrl"></el-input>
         <span style="color:red;font-size:12px;">C端 落地页链接不是必填</span>
       </el-form-item>
@@ -19,7 +27,7 @@
 <script>
 export default {
   props: ["customerType"],
-  data() {
+  data () {
     return {
       ruleForm: {
         content: "",
@@ -50,22 +58,22 @@ export default {
     };
   },
   methods: {
-    validate() {
+    validate () {
       return new Promise((resolve, reject) => {
-          this.$refs.ruleForm.validate((valid, field) => {
-            console.log(valid, field)
-            if (valid) {
-              resolve(true)
-            } else {
-              reject(new Error(Object.values(field)[0][0].message))
-            }
-          })
+        this.$refs.ruleForm.validate((valid, field) => {
+          console.log(valid, field)
+          if (valid) {
+            resolve(true)
+          } else {
+            reject(new Error(Object.values(field)[0][0].message))
+          }
         })
+      })
     },
-    getData() {
+    getData () {
       return this.ruleForm;
     },
-    resetForm() {
+    resetForm () {
       this.$refs["ruleForm"].resetFields();
     }
   }
