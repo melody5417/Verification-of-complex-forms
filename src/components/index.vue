@@ -71,6 +71,18 @@ export default {
     message
   },
   methods: {
+    validate(){
+        return new Promise((resolve, reject) => {
+          this.$refs.indexForm.validate((valid, field) => {
+            console.log(valid, field)
+            if (valid) {
+              resolve(true)
+            } else {
+              reject(new Error(Object.values(field)[0][0].message))
+            }
+          })
+        })
+      },
     // 父表单验证通过才会验证子表单，存在先后顺序
     submitForm() {
       const templateType = this.typeMap[this.indexForm.type];
@@ -90,15 +102,21 @@ export default {
           this.fakeSubmit[this.indexForm.type](reqData);
         })
         .catch(err => {
-          console.log(err);
+          console.log('err', err)
+          const errMsg = err.message || ''
+          this.$message({
+            iconClass: 'el-icon-error',
+            dangerouslyUseHTMLString: true,
+            message: `<div style="margin-left:10px;">失败 ${errMsg}</div>`
+          })
         });
     },
     // 父表单，子表单一起验证
     submitForm1() {
       const templateType = this.typeMap[this.indexForm.type];
-      const validate1 = this.$refs["indexForm"].validate();
-      const validate2 = this.$refs[templateType].vaildate();
-      父子表单一起验证
+      const validate1 = this.validate();
+      const validate2 = this.$refs[templateType].validate();
+      // 父子表单一起验证
       Promise.all([validate1, validate2])
         .then(res => {
           // 都通过时，发送请求
@@ -109,7 +127,13 @@ export default {
           this.fakeSubmit[this.indexForm.type](reqData);
         })
         .catch(err => {
-          console.log(err);
+          console.log('err', err)
+          const errMsg = err.message || ''
+          this.$message({
+            iconClass: 'el-icon-error',
+            dangerouslyUseHTMLString: true,
+            message: `<div style="margin-left:10px;">失败 ${errMsg}</div>`
+          })
         });
     },
   }
